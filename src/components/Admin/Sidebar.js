@@ -11,12 +11,13 @@ import {
 
 import { FaTachometerAlt, FaGem, FaReact, FaGithub, FaRegLaughWink, FaHeart } from 'react-icons/fa';
 import sidebarBg from '../../assets/bg2.jpg';
-import {DiReact} from 'react-icons/di'
-import {MdDashboard} from 'react-icons/md'
+import { DiReact } from 'react-icons/di'
+import { MdDashboard } from 'react-icons/md'
 import './Sidebar.scss'
-const Sidebar = (props) =>{
+import { Link } from 'react-router-dom';
+const Sidebar = (props) => {
     const { image, collapsed, toggled, handleToggleSidebar } = props;
-    return(
+    return (
         <>
             <ProSidebar
                 image={sidebarBg}
@@ -47,9 +48,10 @@ const Sidebar = (props) =>{
                     <Menu iconShape="circle">
                         <MenuItem
                             icon={<MdDashboard />}
-                            // suffix={<span className="badge red">New</span>}
+                        // suffix={<span className="badge red">New</span>}
                         >
                             Dashboard
+                            <Link to='/admins' />
                         </MenuItem>
                         {/* <MenuItem icon={<FaGem />}> components </MenuItem> */}
                     </Menu>
@@ -60,7 +62,10 @@ const Sidebar = (props) =>{
                             icon={<FaGem />}
                             title='Features'
                         >
-                            <MenuItem>Quản lý users</MenuItem>
+                            <MenuItem>
+                                Quản lý users
+                                <Link to='/admins/manage-user' />
+                            </MenuItem>
                             <MenuItem> Quản lý bài quiz</MenuItem>
                             <MenuItem> Quản lý câu hỏi</MenuItem>
                         </SubMenu>
@@ -83,7 +88,7 @@ const Sidebar = (props) =>{
                         >
                             <FaGithub size={'1em'} />
                             <span style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                 KH7NH
+                                KH7NH
                             </span>
                         </a>
                     </div>
