@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FcPlus } from 'react-icons/fc'
 import { toast } from 'react-toastify';
-import { postCreateNewUser } from '../../../services/apiService'
+import { putUpdateUser } from '../../../services/apiService'
+import _ from 'lodash'
 
-const ModalCreateUser = (props) => {
-    const { show, setShow } = props
+const ModalUpdateUser = (props) => {
+    const { show, setShow, dataUpdate } = props
 
     const handleClose = () => {
         setShow(false)
@@ -16,6 +17,7 @@ const ModalCreateUser = (props) => {
         setRole('USERS')
         setImage('')
         setPreviewImage('')
+        props.resetUpdateData()
     }
     const handleUploadImage = (e) => {
         if (e.target && e.target.files && e.target.files[0]) {
@@ -33,36 +35,29 @@ const ModalCreateUser = (props) => {
     const [image, setImage] = useState('')
     const [previewImage, setPreviewImage] = useState('')
 
-    const validateEmail = (email) => {
-        return String(email)
-            .toLowerCase()
-            .match(
-                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            );
-    };
-    const handleSubmitCreateUser = async () => {
-        //validate
-        const isValidateEmail = validateEmail(email)
-        if (!isValidateEmail) {
-            // alert('asda')
-            toast.error('Invalid Email')
-            return;
-        } 
-        if(!password){
-            toast.error('Invalid password')
-            return
+    useEffect(() => {
+        if (!_.isEmpty(dataUpdate)) {
+            //update state
+            setEmail(dataUpdate.email)
+            setUsername(dataUpdate.username)
+            setRole(dataUpdate.role)
+            setImage('')
+            if (dataUpdate.image) {
+                setPreviewImage(`data:image/jpeg;base64,${dataUpdate.image}`)
+            }
         }
-        else {
-            //submit data
-            let data = await postCreateNewUser(email, password, username, role, image)
-            if(data && data.EC === 0){
-                toast.success('Create new user success')
-                handleClose()
-                await props.fetchListUser()
-            }
-            if(data&& data.EC !==0){
-                toast.error(data.EM)
-            }
+    }, [dataUpdate])
+
+    const handleSubmitCreateUser = async () => {
+        //submit data
+        let data = await putUpdateUser(dataUpdate.id, username, role, image)
+        if (data && data.EC === 0) {
+            toast.success('Update a user success')
+            handleClose()
+            await props.fetchListUser()
+        }
+        if (data && data.EC !== 0) {
+            toast.error(data.EM)
         }
     }
 
@@ -80,7 +75,7 @@ const ModalCreateUser = (props) => {
                 className='modal-add-user'
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Add new user</Modal.Title>
+                    <Modal.Title>Update a user</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <form className="row g-3">
@@ -89,6 +84,7 @@ const ModalCreateUser = (props) => {
                             <input type="email"
                                 className="form-control"
                                 value={email}
+                                disabled
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
@@ -97,6 +93,7 @@ const ModalCreateUser = (props) => {
                             <input type="password"
                                 className="form-control"
                                 value={password}
+                                disabled
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
@@ -111,7 +108,7 @@ const ModalCreateUser = (props) => {
                         </div>
                         <div className="col-md-4">
                             <label className="form-label">Role</label>
-                            <select className="form-select" onChange={(e) => setRole(e.target.value)}>
+                            <select value={role} className="form-select" onChange={(e) => setRole(e.target.value)}>
                                 <option value='USER'>USER</option>
                                 <option value='ADMIN'>ADMIN</option>
                             </select>
@@ -150,4 +147,4 @@ const ModalCreateUser = (props) => {
     );
 }
 
-export default ModalCreateUser
+export default ModalUpdateUser
