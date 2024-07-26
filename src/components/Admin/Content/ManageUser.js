@@ -9,17 +9,17 @@ import ModalDeleteUser from "./ModalDeleteUser"
 import TableUserPaginate from "./TableUserPaginate"
 
 const ManageUser = (props) => {
-    const LIMIT_USER = 3
-    const [showModalCreateUser, setShowModalCreateUser] = useState(false)
-    const [listUsers, setListUsers] = useState([])
-    const [showModalUpdateUser, setShowModalUpdateUser] = useState(false)
-    const [dataUpdate, setDataUpdate] = useState({})
-    const [showModalViewDetailUser, setShowModalViewDetailUser] = useState(false)
-    const [dataViewDetail, setDataDetail] = useState({})
-    const [showModalDeleteUser, setShowModalDeletelUser] = useState(false)
-    const [dataDelete, setDataDelete] = useState({})
-    const [pageCount, setPageCount] = useState(0)
-    const [currentPage, setCurrentPage] = useState(1)
+                const LIMIT_USER = 3
+                const [showModalCreateUser, setShowModalCreateUser] = useState(false)
+                const [listUsers, setListUsers] = useState([])
+                const [showModalUpdateUser, setShowModalUpdateUser] = useState(false)
+                const [dataUpdate, setDataUpdate] = useState({})
+                const [showModalViewDetailUser, setShowModalViewDetailUser] = useState(false)
+                const [dataViewDetail, setDataDetail] = useState({})
+                const [showModalDeleteUser, setShowModalDeletelUser] = useState(false)
+                const [dataDelete, setDataDelete] = useState({})
+                const [pageCount, setPageCount] = useState(0)
+                const [currentPage, setCurrentPage] = useState(1)
 
 
     useEffect(() => {
